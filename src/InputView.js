@@ -33,28 +33,28 @@ const InputView = {
     const result = validateDateNumber(input);
 
     if (result) {
-      const { number, day } = result;
-      return { number, day };
+      const { month, weekday } = result;
+      return { month, weekday };
     }
   },
   async getAllInput() {
     while (true) {
-      const dateAndDay = await this.getValidDateAndDay();
-      if (!dateAndDay) {
+      const monthAndWeekDay = await this.getValidDateAndDay();
+      if (!monthAndWeekDay) {
         continue;
       }
 
-      const weekday = await this.getValidWeekdayList();
-      if (!weekday) {
+      const weekdayList = await this.getValidWeekdayList();
+      if (!weekdayList) {
         continue;
       }
-      const weekend = await this.getValidWeekendList();
-      if (!weekend) {
+      const weekendList = await this.getValidWeekendList();
+      if (!weekendList) {
         continue;
       }
 
-      if (dateAndDay && weekday && weekend)
-        return { dateAndDay, weekday, weekend };
+      if (monthAndWeekDay && weekdayList && weekendList)
+        return { monthAndWeekDay, weekdayList, weekendList };
     }
   },
 };

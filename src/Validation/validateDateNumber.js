@@ -26,7 +26,7 @@ export default function validateDateNumber(inputString) {
     );
     return null;
   }
-  const [number, day] = inputString.split(',');
+  const [number, weekday] = inputString.split(',');
   if (!isValidNumber(number)) {
     OutputView.printMessage(
       '[ERROR] 유효하지 않은 날짜입니다. 다시 입력해 주세요.',
@@ -40,12 +40,12 @@ export default function validateDateNumber(inputString) {
     return null;
   }
 
-  if (!isValidDay(day)) {
+  if (!isValidDay(weekday)) {
     OutputView.printMessage(
       `[ERROR] 유효하지 않은 날짜입니다. 다시 입력해 주세요.`,
     );
     return null;
   }
 
-  return { number: Number(number), day };
+  return { month: Number(number), weekday };
 }
