@@ -1,4 +1,5 @@
 import InputView from './InputView.js';
+import OutputView from './OutputView.js';
 
 class App {
   async run() {
@@ -40,6 +41,62 @@ class App {
 
       return datesList;
     }
+    const dateList = getDateandDay(month, weekday);
+    const finalizeList = [];
+
+    function spinlistandGetCurr(list) {
+      const curr = list.shift();
+      list.push(curr);
+      return curr;
+    }
+    // for (let i = 0; i < weekdayList.length + 1; i++) {
+    //   const curr = spinlistandGetCurr(weekdayList);
+    //   console.log(curr, weekdayList);
+    // }
+    let leftover;
+    dateList.forEach((dateObj) => {
+      const { month, date, day, isHoliday } = dateObj;
+
+      const currentCurr = finalizeList[finalizeList.length - 1];
+
+      if (isHoliday || day === '일' || day === '토') {
+        let curr = spinlistandGetCurr(weekendList);
+        if (currentCurr?.curr && currentCurr.curr === curr) {
+          if (leftover) {
+            finalizeList.push({ month, date, day, isHoliday, curr: leftover });
+            leftover = null;
+            return;
+          }
+          leftover = curr;
+          curr = spinlistandGetCurr(weekendList);
+          finalizeList.push({ month, date, day, isHoliday, curr });
+        } else {
+          finalizeList.push({ month, date, day, isHoliday, curr });
+        }
+      } else {
+        let curr = spinlistandGetCurr(weekdayList);
+        if (currentCurr?.curr && currentCurr.curr === curr) {
+          if (leftover) {
+            finalizeList.push({ month, date, day, isHoliday, curr: leftover });
+            leftover = null;
+            return;
+          }
+          leftover = curr;
+          curr = spinlistandGetCurr(weekdayList);
+          finalizeList.push({ month, date, day, isHoliday, curr });
+        } else {
+          finalizeList.push({ month, date, day, isHoliday, curr });
+        }
+      }
+    });
+    finalizeList.forEach((list) => {
+      const { month: finalMonth, date, day, isHoliday, curr } = list;
+      let holiday = '';
+      if (isHoliday) holiday = '(휴일)';
+      OutputView.printMessage(
+        `${finalMonth}월 ${date}일 ${day}${holiday} ${curr}`,
+      );
+    });
   }
 }
 
