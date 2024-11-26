@@ -49,24 +49,21 @@ class App {
       list.push(curr);
       return curr;
     }
-    // for (let i = 0; i < weekdayList.length + 1; i++) {
-    //   const curr = spinlistandGetCurr(weekdayList);
-    //   console.log(curr, weekdayList);
-    // }
-    let leftover;
+
+    let leftover = null;
     dateList.forEach((dateObj) => {
       const { month, date, day, isHoliday } = dateObj;
 
       const currentCurr = finalizeList[finalizeList.length - 1];
 
       if (isHoliday || day === '일' || day === '토') {
+        if (leftover) {
+          finalizeList.push({ month, date, day, isHoliday, curr: leftover });
+          leftover = null;
+          return;
+        }
         let curr = spinlistandGetCurr(weekendList);
         if (currentCurr?.curr && currentCurr.curr === curr) {
-          if (leftover) {
-            finalizeList.push({ month, date, day, isHoliday, curr: leftover });
-            leftover = null;
-            return;
-          }
           leftover = curr;
           curr = spinlistandGetCurr(weekendList);
           finalizeList.push({ month, date, day, isHoliday, curr });
@@ -74,13 +71,13 @@ class App {
           finalizeList.push({ month, date, day, isHoliday, curr });
         }
       } else {
+        if (leftover) {
+          finalizeList.push({ month, date, day, isHoliday, curr: leftover });
+          leftover = null;
+          return;
+        }
         let curr = spinlistandGetCurr(weekdayList);
         if (currentCurr?.curr && currentCurr.curr === curr) {
-          if (leftover) {
-            finalizeList.push({ month, date, day, isHoliday, curr: leftover });
-            leftover = null;
-            return;
-          }
           leftover = curr;
           curr = spinlistandGetCurr(weekdayList);
           finalizeList.push({ month, date, day, isHoliday, curr });
